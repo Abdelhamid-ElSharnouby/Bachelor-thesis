@@ -104,10 +104,9 @@ and angle control system with inverted pendulum CO3620-2G, the digital
 universal controller CO3620-2A, and the MATLAB programming interface and
 toolbox CO3636-3D. Figure~\ref{fig:setup} shows the setup.
 
-\placeholderfig{0.8}{ln_setup_photo.png}
+\includefig{0.8}{ln_setup_photo.png}
   {Laboratory setup: CO3620-2G position and angle control system with inverted pendulum and CO3620-2A digital universal controller.}
   {fig:setup}
-  {Photograph of the complete lab setup (cart, linear axis, pendulum rod, CO3620-2A controller unit). Please provide.}
 
 \subsection{Position and Angle Control System CO3620-2G}
 \label{subsec:co3620-2g}
@@ -184,10 +183,9 @@ measured from the hanging position, so that $\theta = \pi$ corresponds to the
 upright pendulum. Figure~\ref{fig:fbd} shows the forces acting on the cart and
 the pendulum.
 
-\placeholderfig{0.6}{cart_pendulum_fbd.png}
+\includefig{0.6}{cart_pendulum_fbd.png}
   {Free-body diagram of the cart and the pendulum, adapted from~\cite{ln_manual}.}
   {fig:fbd}
-  {Free-body diagram: cart (mass $M$, force $F$, friction), pendulum (mass $m$, distance $l$, angle $\theta$), reaction forces $N$ and $P$, gravity. Please redraw (e.g.\ in draw.io/TikZ) rather than copying the manual figure.}
 
 The horizontal force balance of the cart, with viscous friction coefficient $b$,
 is
@@ -341,10 +339,9 @@ balancing controller is replaced in this work (requirement R7); the other
 elements are described here because they define the conditions under which
 the \ac{mpc} operates.
 
-\placeholderfig{0.95}{a62_control_routine.png}
+\includefig{0.95}{a62_control_routine.png}
   {Structure of the Control-Routine of the course model with the swing-up controller, the position controller, the state space controller, and the controller selection logic.}
   {fig:a62}
-  {Screenshot of the Simulink subsystem \emph{Control-Routine} (from A62\_MPC\_Sim.slx or A62\_SwingUp\_Control.slx), showing the three controllers, the two Controller Selection blocks and the two Switch blocks. Please provide.}
 
 \subsection{Swing-Up Controller}
 \label{subsec:swingup}
@@ -630,10 +627,9 @@ $q_x = 5000$, $q_v = 100$, $q_\varphi = 1000$. The step responses of the
 candidates are shown in Figure~\ref{fig:candidates}; the detailed evaluation of
 the final controller is presented in the Results chapter.
 
-\placeholderfig{0.85}{mpc_candidates_step.png}
+\includefig{0.85}{mpc_candidates_step.png}
   {Simulated response of the four weight candidates and the course \acs{lqr} to a 100~mm position step: cart position, pendulum angle, and cart acceleration.}
   {fig:candidates}
-  {The 3-panel figure produced by the candidate loop in Calculations.m (x [mm], $\varphi$ [deg], a [m/s$^2$] vs.\ t; four candidates + course LQR dashed). Please export it as PNG and provide.}
 
 \subsection{State Estimation}
 \label{subsec:estimation}
@@ -676,10 +672,9 @@ input of the integrator. This allows both controllers to be run in the same
 model and returns the system to the course \ac{lqr} by changing a single
 parameter.
 
-\placeholderfig{0.9}{state_space_controller_mpc.png}
+\includefig{0.9}{state_space_controller_mpc.png}
   {Modified State Space Controller subsystem: the \acs{mpc} block and the original \acs{lqr} path, selected by the \texttt{useMPC} switch, both feeding the acceleration-to-speed integrator.}
   {fig:sscontroller}
-  {Screenshot of Control-Routine $\rightarrow$ State Space Controller in A62\_MPC\_Sim.slx, showing the observer, the block ``MPC (candidate D)'', K, Nbar, Sum, the ``LQR or MPC'' switch, useMPC, the Discrete-Time Integrator and the gain 20. Please provide.}
 
 \begin{sloppypar}
 The controller is implemented in a MATLAB Function block that calls
@@ -755,10 +750,9 @@ differences from the prediction model: the nonlinearity of the pendulum, the
 friction term, the dynamics and limits of the drive speed loop, sensor
 quantisation, and the discretisation of the controller.
 
-\placeholderfig{0.9}{a62_mpc_sim_plant.png}
+\includefig{0.9}{a62_mpc_sim_plant.png}
   {Plant subsystem of the simulation model A62\_MPC\_Sim, replacing the hardware blocks of the CO3620-2G.}
   {fig:plantsim}
-  {Screenshot of the subsystem ``CO3620-2G Plant'' in A62\_MPC\_Sim.slx (drive speed loop PI, integrators, thetaddot Fcn, quantizers, CAN angle). Please provide.}
 
 \subsection{Real-Time Considerations}
 \label{subsec:realtime}
