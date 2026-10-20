@@ -24,7 +24,7 @@
 \label{chap:methodology}
 \chaptermark{MPC Design}
 
-This chapter describes how the \ac{MPC} stabilising
+This chapter describes how the \ac{mpc} stabilising
 controller for the inverted pendulum on a cart was designed, implemented, and
 prepared for experimental evaluation. Section~\ref{sec:requirements} states the
 control problem and the requirements derived from the hardware.
@@ -33,13 +33,13 @@ Section~\ref{sec:model} derives the nonlinear and linearised models of the
 plant. Section~\ref{sec:baseline} presents the existing control structure of
 the laboratory course into which the new controller is integrated, and
 Section~\ref{sec:selection} justifies the choice of a linear, constrained
-\ac{MPC}. The controller itself is formulated in Section~\ref{sec:mpc}, its
+\ac{mpc}. The controller itself is formulated in Section~\ref{sec:mpc}, its
 implementation in Simulink is described in Section~\ref{sec:implementation},
 and the procedure used to evaluate it is defined in
 Section~\ref{sec:evaluation}.
 
 The controller has so far been designed and verified in simulation only. Its
-execution on the laboratory hardware and its comparison with the \ac{LQR} and \ac{PID} controllers are part of the planned work described in
+execution on the laboratory hardware and its comparison with the \ac{lqr} and \ac{pid} controllers are part of the planned work described in
 Section~\ref{sec:evaluation}.
 
 %--------------------------------------------------------------------------
@@ -125,7 +125,7 @@ The linear axis has a feed of 54~mm per motor revolution, and the
 \emph{Encoder Calculation} block of the Lucas-Nülle toolbox delivers 16000
 counts per revolution, which gives a position resolution of
 $0.054/16000~\mathrm{m} = 3.375~\mu\mathrm{m}$. The pendulum angle is measured
-by an encoder read over the \acf{CAN} bus with a
+by an encoder read over the \acf{can} bus with a
 resolution of 65535 counts per revolution~\cite{ln_manual}.
 
 \subsection{Digital Universal Controller and Toolchain}
@@ -137,10 +137,10 @@ Simulink model is translated into C code with Embedded Coder, compiled, and
 downloaded to the controller; a USB connection exchanges parameters and
 measurement data with MATLAB during operation~\cite{ln_manual}. The programming
 adapter is the C2000 F28335 XDS100V2, and the controller is therefore based on
-a Texas Instruments TMS320F28335 \acf{DSP}.
+a Texas Instruments TMS320F28335 \acf{dsp}.
 
 In the course models, the \emph{LucasNuelleHardware} block executes a
-subsystem called \emph{Control-Routine} as an \acf{ISR} at a frequency of $f_{\mathrm{ISR}} = 8~\mathrm{kHz}$, i.e.\ with a
+subsystem called \emph{Control-Routine} as an \acf{isr} at a frequency of $f_{\mathrm{ISR}} = 8~\mathrm{kHz}$, i.e.\ with a
 period of $T_{\mathrm{ISR}} = 125~\mu\mathrm{s}$. All blocks inside the
 Control-Routine inherit this sample time.
 
@@ -308,8 +308,8 @@ observable from the measurements of $x$ and $\varphi$.
 \subsection{Discretisation}
 \label{subsec:discrete}
 
-The \ac{MPC} operates on a discrete-time model. The model \eqref{eq:ss} was
-discretised with a \acf{ZOH} at the controller sample time
+The \ac{mpc} operates on a discrete-time model. The model \eqref{eq:ss} was
+discretised with a \acf{zoh} at the controller sample time
 $T_s = 10$~ms (Section~\ref{subsec:horizons}), which gives
 $\mathbf{x}(k+1) = A_d\mathbf{x}(k) + B_d u(k)$ with
 \begin{equation}
@@ -333,13 +333,13 @@ continuous-time eigenvalue, $e^{6.678\,T_s} = 1.0691$.
 \label{sec:baseline}
 %--------------------------------------------------------------------------
 
-The \ac{MPC} is integrated into the course model \emph{A62\_SwingUp\_Control},
+The \ac{mpc} is integrated into the course model \emph{A62\_SwingUp\_Control},
 which brings the pendulum from the hanging to the upright position and then
 balances it~\cite{ln_manual}. Its Control-Routine contains three controllers,
 a state observer, and a switching logic (Figure~\ref{fig:a62}). Only the
 balancing controller is replaced in this work (requirement R7); the other
 elements are described here because they define the conditions under which
-the \ac{MPC} operates.
+the \ac{mpc} operates.
 
 \placeholderfig{0.95}{a62_control_routine.png}
   {Structure of the Control-Routine of the course model with the swing-up controller, the position controller, the state space controller, and the controller selection logic.}
@@ -384,7 +384,7 @@ static prefilter,
   \label{eq:lqr}
 \end{equation}
 followed by the integrator \eqref{eq:integrator}. The gain $K$ is the
-continuous-time \ac{LQR} gain for the model \eqref{eq:ss} with
+continuous-time \ac{lqr} gain for the model \eqref{eq:ss} with
 $Q = \operatorname{diag}(1000, 0, 1000, 0)$ and $R = 1$, and $\bar{N}$ is chosen
 so that the cart position has unit static gain. The resulting values are
 \begin{equation}
@@ -396,7 +396,7 @@ with closed-loop eigenvalues at $-9.88 \pm 7.41j$ and $-2.35 \pm 1.94j$. The
 negative position gain reflects the non-minimum-phase behaviour of the
 position response: to move the cart in one direction, the controller first
 moves it in the opposite direction so that the pendulum tilts towards the
-target. This controller serves as the \ac{LQR} reference in the planned
+target. This controller serves as the \ac{lqr} reference in the planned
 comparison (Section~\ref{subsec:benchmark}).
 
 Only $x$ and $\varphi$ are measured, so the full state is reconstructed by a
@@ -450,39 +450,39 @@ Hold (stay in balancing) & $|\varphi| < 20^\circ$ and $|x| < 150$~mm \\
 \label{sec:selection}
 %--------------------------------------------------------------------------
 
-The course already contains a working \ac{LQR}. The \ac{LQR} is optimal for
+The course already contains a working \ac{lqr}. The \ac{lqr} is optimal for
 the unconstrained linear problem, but the limits R3--R5 in
 Table~\ref{tab:requirements} are not part of its design. In the course model,
 the cart speed and acceleration are limited only downstream of the controller,
 by saturation in the drive, and the travel limit is enforced only by the
 controller selection logic, which abandons balancing when $|x| \ge 150$~mm.
-A \ac{PID} controller acting on the pendulum angle alone cannot regulate the
+A \ac{pid} controller acting on the pendulum angle alone cannot regulate the
 cart position at the same time; the course therefore uses cascaded loops for
 this task~\cite{ln_manual}, and such loops again treat the limits only through
 saturation.
 
-\ac{MPC} addresses these points directly. The limits enter the optimisation
+\ac{mpc} addresses these points directly. The limits enter the optimisation
 as constraints, so that the predicted trajectory remains admissible over the
 prediction horizon instead of being clipped afterwards~\cite{rawlings2000}.
 Cart and pendulum are handled in one multivariable problem. For a linear
-model, a quadratic cost and linear constraints, the optimisation is a convex \ac{QP}~\cite{rawlings2000}. Moreover, when the terminal
-cost is the solution of the \acf{DARE} and no constraint is active, the \ac{MPC} control law coincides
-with the infinite-horizon \ac{LQR}~\cite{rawlings2000}. This property is
+model, a quadratic cost and linear constraints, the optimisation is a convex \ac{qp}~\cite{rawlings2000}. Moreover, when the terminal
+cost is the solution of the \acf{dare} and no constraint is active, the \ac{mpc} control law coincides
+with the infinite-horizon \ac{lqr}~\cite{rawlings2000}. This property is
 used here to start the tuning from a controller equivalent to the
-\ac{LQR}, so that the effect of the constraints can later be separated from
+\ac{lqr}, so that the effect of the constraints can later be separated from
 the effect of the weights. This addresses the limitation of the comparison
-in~\cite{minouchehr2015}, where an unconstrained \ac{MPC} was compared with an
-\ac{LQR}.
+in~\cite{minouchehr2015}, where an unconstrained \ac{mpc} was compared with an
+\ac{lqr}.
 
-Two alternative \ac{MPC} variants were considered and not pursued.
-A nonlinear \ac{MPC} based on \eqref{eq:pend_nl} would describe large angles
+Two alternative \ac{mpc} variants were considered and not pursued.
+A nonlinear \ac{mpc} based on \eqref{eq:pend_nl} would describe large angles
 more accurately, but the controller only operates within the holding region of
 Table~\ref{tab:modelogic}, and a nonlinear program is considerably more
-expensive to solve on the target \ac{DSP}~\cite{rawlings2000}. Explicit
-\ac{MPC}, which precomputes the control law offline, is practical only for
+expensive to solve on the target \ac{dsp}~\cite{rawlings2000}. Explicit
+\ac{mpc}, which precomputes the control law offline, is practical only for
 small problems with few constraints and short horizons~\cite{wang2010}; the
 horizon used here (Section~\ref{subsec:horizons}) exceeds this range. A linear
-\ac{MPC} with an online \ac{QP} solver was therefore selected.
+\ac{mpc} with an online \ac{qp} solver was therefore selected.
 
 %--------------------------------------------------------------------------
 \section{MPC Formulation}
@@ -540,7 +540,7 @@ The stage weights are
   \label{eq:QdRd}
 \end{equation}
 where the common factor $1/90$ rescales the cost without changing its
-minimiser. The terminal weight $P$ is the solution of the \ac{DARE} for
+minimiser. The terminal weight $P$ is the solution of the \ac{dare} for
 $(A_d, B_d, Q_d, R_d)$, so that the terminal term approximates the cost of the
 infinite horizon beyond step $N_p$. In the toolbox, the stage cost is realised
 through weights on the outputs $x$, $\varphi$, and $\dot{x}$ for steps $1$ to
@@ -571,7 +571,7 @@ with the slack expressed in scaled units (equal concern for relaxation of 1
 for both outputs). The acceleration limit \eqref{eq:con_u} corresponds to the
 drive specification and is a hard constraint. The speed and travel limits are
 soft constraints: they are respected whenever possible, but they can be
-violated at a high cost if a disturbance would otherwise make the \ac{QP}
+violated at a high cost if a disturbance would otherwise make the \ac{qp}
 infeasible~\cite{rawlings2000}. The travel limit of $\pm 0.15$~m equals the
 holding limit of the controller selection logic (Table~\ref{tab:modelogic});
 a predicted trajectory that would cause the logic to abandon balancing is
@@ -581,19 +581,19 @@ constrained.
 \subsection{Sample Time and Horizons}
 \label{subsec:horizons}
 
-The \ac{MPC} cannot solve a \ac{QP} at the 8~kHz rate of the Control-Routine.
+The \ac{mpc} cannot solve a \ac{qp} at the 8~kHz rate of the Control-Routine.
 A controller sample time of $T_s = 10$~ms was therefore chosen, so that the
-\ac{MPC} is evaluated once every $n_{\mathrm{MPC}} = T_s f_{\mathrm{ISR}} = 80$
+\ac{mpc} is evaluated once every $n_{\mathrm{MPC}} = T_s f_{\mathrm{ISR}} = 80$
 calls of the Control-Routine. This sample time is about 15 times shorter than
 the time constant of the unstable mode (0.15~s, Section~\ref{subsec:params}).
 The prediction horizon is $N_p = 50$ steps, i.e.\ 0.5~s, which covers about
 3.3 time constants of the unstable mode. The control horizon is $N_c = 5$,
-which limits the \ac{QP} to five decision variables plus the slack variable.
+which limits the \ac{qp} to five decision variables plus the slack variable.
 
 \subsection{Weight Tuning}
 \label{subsec:tuning}
 
-The tuning started from weights equivalent to the course \ac{LQR},
+The tuning started from weights equivalent to the course \ac{lqr},
 $Q = \operatorname{diag}(1000, 0, 1000, 0)$ and $R = 1$, and the position and
 speed weights were then increased. Four candidates were simulated for a
 100~mm position step with the linear model and the constraints active
@@ -631,7 +631,7 @@ candidates are shown in Figure~\ref{fig:candidates}; the detailed evaluation of
 the final controller is presented in the Results chapter.
 
 \placeholderfig{0.85}{mpc_candidates_step.png}
-  {Simulated response of the four weight candidates and the course \acs{LQR} to a 100~mm position step: cart position, pendulum angle, and cart acceleration.}
+  {Simulated response of the four weight candidates and the course \acs{lqr} to a 100~mm position step: cart position, pendulum angle, and cart acceleration.}
   {fig:candidates}
   {The 3-panel figure produced by the candidate loop in Calculations.m (x [mm], $\varphi$ [deg], a [m/s$^2$] vs.\ t; four candidates + course LQR dashed). Please export it as PNG and provide.}
 
@@ -641,10 +641,10 @@ the final controller is presented in the Results chapter.
 The toolbox provides a built-in state estimator with an output disturbance
 model. In this design, it is disabled: the output disturbance model is
 removed, and the controller is configured for custom state estimation. At each
-\ac{MPC} sample, the plant state of the controller is set to the estimate
+\ac{mpc} sample, the plant state of the controller is set to the estimate
 $\hat{\mathbf{x}}$ of the existing Luenberger observer \eqref{eq:observer}.
 This keeps the observer of the course unchanged (requirement R7) and gives the
-\ac{MPC} and the \ac{LQR} the same state information, so that differences in
+\ac{mpc} and the \ac{lqr} the same state information, so that differences in
 performance can be attributed to the control law. Because no disturbance model
 is included, the controller does not contain integral action; offset-free
 position tracking relies on the accuracy of the model and of the estimate.
@@ -653,8 +653,8 @@ position tracking relies on the accuracy of the model and of the estimate.
 \label{subsec:qp}
 
 The cost \eqref{eq:cost}, the linear model, and the linear constraints
-\eqref{eq:con_u}--\eqref{eq:con_v} form a convex \ac{QP}, which is solved at
-every \ac{MPC} sample with the active-set solver of the Model Predictive
+\eqref{eq:con_u}--\eqref{eq:con_v} form a convex \ac{qp}, which is solved at
+every \ac{mpc} sample with the active-set solver of the Model Predictive
 Control Toolbox. Only the first element $u(k|k)$ of the optimal input sequence
 is applied, and the problem is solved again at the next sample with a new
 state estimate (receding horizon~\cite{rawlings2000}).
@@ -667,17 +667,17 @@ state estimate (receding horizon~\cite{rawlings2000}).
 \subsection{Integration into the Control-Routine}
 \label{subsec:integration}
 
-The \ac{MPC} replaces the prefilter, the state feedback, and the summation of
+The \ac{mpc} replaces the prefilter, the state feedback, and the summation of
 \eqref{eq:lqr} inside the \emph{State Space Controller} subsystem; the
 integrator \eqref{eq:integrator}, the observer, and all hardware blocks are
 unchanged (Figure~\ref{fig:sscontroller}). A constant \texttt{useMPC} and a
-switch select either the \ac{MPC} or the original \ac{LQR} output as the
+switch select either the \ac{mpc} or the original \ac{lqr} output as the
 input of the integrator. This allows both controllers to be run in the same
-model and returns the system to the course \ac{LQR} by changing a single
+model and returns the system to the course \ac{lqr} by changing a single
 parameter.
 
 \placeholderfig{0.9}{state_space_controller_mpc.png}
-  {Modified State Space Controller subsystem: the \acs{MPC} block and the original \acs{LQR} path, selected by the \texttt{useMPC} switch, both feeding the acceleration-to-speed integrator.}
+  {Modified State Space Controller subsystem: the \acs{mpc} block and the original \acs{lqr} path, selected by the \texttt{useMPC} switch, both feeding the acceleration-to-speed integrator.}
   {fig:sscontroller}
   {Screenshot of Control-Routine $\rightarrow$ State Space Controller in A62\_MPC\_Sim.slx, showing the observer, the block ``MPC (candidate D)'', K, Nbar, Sum, the ``LQR or MPC'' switch, useMPC, the Discrete-Time Integrator and the gain 20. Please provide.}
 
@@ -692,14 +692,14 @@ summarised in Algorithm~\ref{alg:mpcblock}.
 \end{sloppypar}
 
 \begin{algorithm}[ht]
-\caption{Execution of the \acs{MPC} block in each call of the Control-Routine.}
+\caption{Execution of the \acs{mpc} block in each call of the Control-Routine.}
 \label{alg:mpcblock}
 \begin{algorithmic}[1]
 \IF{balancing is enabled}
   \IF{$c = 0$}
     \STATE set the controller state to $\hat{\mathbf{x}}$ (custom estimation)
     \STATE set the references $[r,\ 0,\ 0,\ (L_c\mathbf{x}_{\mathrm{ref}})^{\mathsf{T}}]$ with $r$ in metres
-    \STATE solve the \ac{QP} and store the first input $a_{\mathrm{hold}} \leftarrow u(k|k)$
+    \STATE solve the \ac{qp} and store the first input $a_{\mathrm{hold}} \leftarrow u(k|k)$
   \ENDIF
   \STATE $c \leftarrow c + 1$; \textbf{if} $c \ge n_{\mathrm{MPC}}$ \textbf{then} $c \leftarrow 0$
 \ELSE
@@ -709,12 +709,12 @@ summarised in Algorithm~\ref{alg:mpcblock}.
 \end{algorithmic}
 \end{algorithm}
 
-The \ac{QP} is thus solved in the first call after balancing is enabled and
+The \ac{qp} is thus solved in the first call after balancing is enabled and
 then in every $n_{\mathrm{MPC}}$-th call; between solutions, the last
 acceleration is held, which corresponds to the zero-order hold assumed in the
 discretisation. When balancing is disabled, the controller state and the
 output are reset, and the integrator \eqref{eq:integrator} is reset on the
-rising edge of the balancing signal, so that the \ac{MPC} starts from zero
+rising edge of the balancing signal, so that the \ac{mpc} starts from zero
 speed and from the current estimate every time the pendulum is captured.
 
 \subsection{Simulation Model}
@@ -764,8 +764,8 @@ quantisation, and the discretisation of the controller.
 \label{subsec:realtime}
 
 At 8~kHz, every call of the Control-Routine must complete within 125~$\mu$s,
-including the call in which the \ac{QP} is solved. The solution time of the
-\ac{QP} on the TMS320F28335 has not been measured yet. To provide a larger
+including the call in which the \ac{qp} is solved. The solution time of the
+\ac{qp} on the TMS320F28335 has not been measured yet. To provide a larger
 time budget, the Control-Routine frequency of the hardware block is to be
 reduced from 8~kHz to 1~kHz, which gives 1~ms per call; with $T_s = 10$~ms,
 $n_{\mathrm{MPC}}$ becomes 10. Because the observer and the filters of the
@@ -785,10 +785,10 @@ $N_c = 3$ or the Control-Routine frequency to 500~Hz.
 \subsection{Simulation Scenarios}
 \label{subsec:scenarios}
 
-The controller is evaluated in two stages. First, the \ac{MPC} is closed
+The controller is evaluated in two stages. First, the \ac{mpc} is closed
 directly around the linear discrete-time model with the true state fed to the
 controller, in order to verify the formulation, the constraint handling, and
-the feasibility of the \ac{QP}. Second, the complete Control-Routine is
+the feasibility of the \ac{qp}. Second, the complete Control-Routine is
 simulated in \emph{A62\_MPC\_Sim} with the nonlinear plant, the observer, and
 the mode logic. The scenarios are listed in Table~\ref{tab:scenarios}.
 
@@ -818,7 +818,7 @@ the overshoot and the undershoot of the cart position; the maximum absolute
 pendulum angle $\max|\varphi|$; the maximum absolute cart speed and
 acceleration, $\max|\dot{x}|$ and $\max|a|$, which are compared with the limits
 R3--R5; the root mean square of the acceleration as a measure of control
-effort; and, for the \ac{MPC}, the maximum number of \ac{QP} iterations and
+effort; and, for the \ac{mpc}, the maximum number of \ac{qp} iterations and
 whether a feasible solution was found at every sample. On the hardware, the
 processor load reported by the course model is recorded in addition.
 
@@ -829,13 +829,13 @@ The hardware experiments have not yet been carried out. They are planned in
 the following order, so that the effect of each change can be identified:
 \begin{enumerate}
   \item The course model is saved under a new name, the Control-Routine
-        frequency is set to 1~kHz, and the \ac{MPC} block, the
+        frequency is set to 1~kHz, and the \ac{mpc} block, the
         \texttt{useMPC} constant, and the switch are copied from
         \emph{A62\_MPC\_Sim} without changing any Lucas-Nülle block.
-  \item The model is run with the course \ac{LQR} (\texttt{useMPC}$\,=0$) to
+  \item The model is run with the course \ac{lqr} (\texttt{useMPC}$\,=0$) to
         verify the reduced rate on the hardware with a known controller, and
         the processor load is recorded.
-  \item The \ac{MPC} is activated (\texttt{useMPC}$\,=1$), the processor load
+  \item The \ac{mpc} is activated (\texttt{useMPC}$\,=1$), the processor load
         is recorded, and the scenarios of Table~\ref{tab:scenarios} that can be
         reproduced on the hardware are repeated.
 \end{enumerate}
@@ -843,11 +843,11 @@ the following order, so that the effect of each change can be identified:
 \subsection{Planned Comparison with LQR and PID Control}
 \label{subsec:benchmark}
 
-The thesis will compare the \ac{MPC} with an \ac{LQR} and a \ac{PID}-based
-controller on the same plant. The course \ac{LQR}
+The thesis will compare the \ac{mpc} with an \ac{lqr} and a \ac{pid}-based
+controller on the same plant. The course \ac{lqr}
 (Section~\ref{subsec:lqr}) is available in the same model through the
 \texttt{useMPC} switch, uses the same observer, and therefore allows a
-comparison under identical conditions. The \ac{PID}-based controller and the
+comparison under identical conditions. The \ac{pid}-based controller and the
 details of the comparison will be defined in a later stage of the work. The
 comparison will use the scenarios and metrics of
 Sections~\ref{subsec:scenarios} and~\ref{subsec:metrics}.
@@ -857,14 +857,14 @@ Sections~\ref{subsec:scenarios} and~\ref{subsec:metrics}.
 \label{sec:methodsummary}
 %--------------------------------------------------------------------------
 
-A linear, constrained \ac{MPC} with a sample time of 10~ms, a prediction
-horizon of 50 steps, a control horizon of 5 steps, and a \ac{DARE}-based
+A linear, constrained \ac{mpc} with a sample time of 10~ms, a prediction
+horizon of 50 steps, a control horizon of 5 steps, and a \ac{dare}-based
 terminal cost was designed for the CO3620-2G inverted pendulum. The controller
 uses the cart acceleration as input, enforces the acceleration limit as a hard
 constraint and the speed and travel limits as soft constraints, and obtains
 its state from the existing Luenberger observer. It replaces only the
 balancing controller of the course model and can be switched back to the
-course \ac{LQR} with a single parameter. The controller has been verified in
+course \ac{lqr} with a single parameter. The controller has been verified in
 simulation with a nonlinear plant model; its execution on the hardware and the
-comparison with \ac{LQR} and \ac{PID} control are the next steps of the
+comparison with \ac{lqr} and \ac{pid} control are the next steps of the
 work.

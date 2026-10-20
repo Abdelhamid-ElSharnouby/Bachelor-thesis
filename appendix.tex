@@ -1,0 +1,33 @@
+\appendix
+\renewcommand{\appendixtocname}{Appendix}
+\renewcommand{\appendixpagename}{\appendixtocname}
+\addappheadtotoc
+\setboolean{@twoside}{false}
+\appendixpage
+
+\chapter{Lists}
+\addcontentsline{toc}{section}{List of Abbreviations}
+\begin{acronym}[\hspace{3cm}]
+  \acro{ac}[AC]{Acronym Without Citation}
+  \acro{ac2}[AC2]{Acronym With Citation \cite{citeKey2}}
+  \acro{can}[CAN]{Controller Area Network}
+  \acro{com}[CoM]{Centre of Mass}
+  \acro{dare}[DARE]{Discrete-time Algebraic Riccati Equation}
+  \acro{dsp}[DSP]{Digital Signal Processor}
+  \acro{eso}[ESO]{Extended State Observer}
+  \acro{isr}[ISR]{Interrupt Service Routine}
+  \acro{lmi}[LMI]{Linear Matrix Inequality}
+  \acro{lpv}[LPV]{Linear Parameter-Varying}
+  \acro{lqr}[LQR]{Linear Quadratic Regulator}
+  \acro{mpc}[MPC]{Model Predictive Control}
+  \acro{pid}[PID]{Proportional--Integral--Derivative}
+  \acro{qp}[QP]{Quadratic Program}
+  \acro{uav}[UAV]{Unmanned Aerial Vehicle}
+  \acro{wip}[WIP]{Wheeled Inverted Pendulum}
+  \acro{zoh}[ZOH]{Zero-Order Hold}
+\end{acronym}
+\clearpage
+\listoffigures
+\addcontentsline{toc}{section}{List of Figures}
+% \listoftables
+% \addcontentsline{toc}{section}{List of Tables}
